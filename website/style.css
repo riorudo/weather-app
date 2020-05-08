@@ -16,14 +16,6 @@ body{
     font-family: 'Oswald', sans-serif;
 }
 
-.holder{
-
-}
-
-.entry{
-    background: rgba(59, 74, 107, .4);
-}
-
 #entryHolder{
 
 }
@@ -40,11 +32,24 @@ body{
 
 }
 
+.box{
+    box-sizing: border-box;
+}
+
+.entry{
+    background: rgba(59, 74, 107, .4);
+}
+
 .headline {
 
 }
 .title{
 
+}
+
+.weatherData {
+    padding: 5px;
+    background-color: white;
 }
 
 /*  Basic Styling To Override Default For Basic HTML Elements */
@@ -53,7 +58,7 @@ label{
     font-size: 27px;
 }
 
-input{
+input, select{
     display:block;
     height: 60px;
     width: 320px;
@@ -74,6 +79,7 @@ button{
     border: none;
     box-shadow: 2px 4px 5px #444;
 }
+
 h1{
     font-size: 36px;
 }
@@ -95,17 +101,14 @@ button:focus {
 ::placeholder { /* Firefox, Chrome, Opera */ 
     color: #f0d43a; 
     font-family: 'Oswald', sans-serif;
-
 } 
   
 :-ms-input-placeholder { /* Internet Explorer 10-11 */ 
     color: #f0d43a; 
     font-family: 'Oswald', sans-serif;
-
 } 
   
 ::-ms-input-placeholder { /* Microsoft Edge */ 
     color: #f0d43a; 
     font-family: 'Oswald', sans-serif;
-
 } 
