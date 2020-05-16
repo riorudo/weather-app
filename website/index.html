@@ -12,9 +12,8 @@
 <body>
 <section id="app">
     <header class="box headline">
-        Weather Journal App
+        <h1>Weather Journal App</h1>
         <div id="msgNoGeolocation"></div>
-        <p>Get a temperature forecast for the next 7 days</p>
     </header>
     <section class="box main">
         <div class="weatherData" id="weatherData">
@@ -24,7 +23,7 @@
             <div class="box margin-vertical location">
                 <div class="zip">
                     <label for="zip">Enter Zipcode here *</label>
-                    <input type="text" id="zip" placeholder="enter zip code here" name="zip" required>
+                    <input type="text" id="zip" placeholder=" enter zip code here" name="zip" required>
                 </div>
                 <div class="countryCode">
                     <label for="countryCode">Choose a country *</label>
@@ -35,20 +34,17 @@
             <div class="box margin-vertical personalData">
                 <div class="feel">
                     <label for="feelings">How are you feeling today? *</label>
-                    <textarea id="feelings" placeholder="enter your feelings here" rows="9" name="feelings"
+                    <textarea id="feelings" placeholder=" enter your feelings here" rows="9" name="feelings"
                               required></textarea>
                 </div>
                 <div class="submitBtn">
                     <button id="generate" type="submit" name="submitButton">Generate</button>
                 </div>
             </div>
-            <div class="box margin-vertical entry">
-                <div class="title">Most Recent Entry</div>
-                <div id="entryHolder">
-                    <div id="date"></div>
-                    <div id="temp"></div>
-                    <div id="content"></div>
-                </div>
+            <div class="box margin-vertical entry" id="entry">
+                <div class="entryTitle">Recent Entries</div>
+                <ul id="entryList" class="entryList">
+                </ul>
             </div>
         </form>
     </section>

@@ -1,4 +1,4 @@
-body{
+body {
     margin: 0;
     background: #fffff8;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
@@ -6,16 +6,16 @@ body{
 }
 
 /*  Basic Styling To Override Default For Basic HTML Elements */
-label{
+label {
     box-sizing: border-box;
-    display:block;
+    display: block;
     font-size: 27px;
 }
 
-input, select, button,textarea {
+input, select, button, textarea {
     box-sizing: border-box;
-    display:block;
-    background:#22b2da;
+    display: block;
+    background: #22b2da;
     color: #f0d43a;
     width: 100%;
     font-size: 20px;
@@ -23,19 +23,20 @@ input, select, button,textarea {
     border: none;
 }
 
-input, select{
+input, select {
     height: 60px;
 }
 
-button{
+button {
     height: 100px;
     background: #3b4a6b;
     font-size: 26px;
     box-shadow: 2px 4px 5px #444;
 }
 
-h1{
+h1 {
     font-size: 36px;
+    line-height: 10%;
 }
 
 
@@ -46,6 +47,7 @@ textarea:focus,
 button:focus {
     outline: none;
 }
+
 /* Style for Placeholder Text*/
 ::placeholder { /* Firefox, Chrome, Opera */
     color: #f0d43a;
@@ -63,7 +65,7 @@ button:focus {
 }
 
 /* Custom app styling*/
-#app{
+#app {
     padding: 0 5px;
     display: grid;
     grid-template-areas: "hd" "main";
@@ -73,7 +75,7 @@ button:focus {
     font-family: 'Oswald', sans-serif;
 }
 
-.box{
+.box {
     box-sizing: border-box;
 }
 
@@ -102,8 +104,30 @@ button:focus {
     flex-direction: column;
 }
 
-.entry{
+.entry {
+    display: none;
     background: rgba(59, 74, 107, 0.4);
+}
+
+.entryList {
+    padding: 0 0 10px 0;
+    list-style: none;
+}
+
+.entryTitle {
+    padding-left: 10px;
+}
+
+.entryItem {
+    box-sizing: border-box;
+    border: 1px solid #f0d43a;
+    padding: 10px;
+    margin: 0 10px 10px 10px;
+}
+
+.entryItem:hover {
+    background: #3b4a6b;
+    cursor: pointer;
 }
 
 .margin-vertical {
@@ -130,7 +154,7 @@ button:focus {
 }
 
 @media (min-width: 900px) {
-    #app{
+    #app {
         grid-template-columns: auto 900px auto;
         grid-template-areas: "lb hd rb" "lb main rb";
         justify-content: center;

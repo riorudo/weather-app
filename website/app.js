@@ -2,8 +2,9 @@
 const COUNTRY_CODES_URL = '/country-codes';
 const NEW_ENTRY_URL = '/new-entry';
 const RECENT_ENTRIES_URL = '/recent-entries';
+let recentEntriesData = [];
 
-// Get weather data from server
+// API requests
 const getWeatherData = async (url = '') => {
     const res = await fetch(url, {
         method: 'GET',
@@ -59,7 +60,10 @@ function getLocation() {
             getWeatherData(url)
                 .then((data) => {
                     drawChart(data);
-                    recentEntries().then((data) => console.log(data));
+                    recentEntries().then((data) => {
+                        recentEntriesData = [...data];
+                        generateEntries(recentEntriesData);
+                    });
                 });
         });
     } else {
@@ -84,34 +88,31 @@ const recentEntries = async () => {
     }
 }
 
-function mapWeatherDataValues(days, key) {
-    if (!days || days.left < 1) {
+function generateEntries(entries) {
+    if (!entries || !entries.length > 0) {
         return;
     }
-    const dataArr = [];
-    days.forEach((day) => {
-        let dataItem;
-        // Access nested object property over string path like 'temp.day'
-        switch (key) {
-            case ('dt'):
-                dataItem = moment.unix(day.dt).format("MM/DD/YYYY");
-                break;
-            case ('temp.min'):
-            case ('temp.max'):
-                dataItem = (key.split('.').reduce((p, c) => p && p[c] || null, day) - 273.15).toFixed(2);
-                break;
-            default:
-                dataItem = [];
-                break;
-        }
-        dataArr.push(dataItem);
-    });
-    return dataArr;
+    const entryList = document.getElementById('entryList');
+    let templateElemStr = '';
+
+    entries.forEach((entry, index) => {
+        const newEntry = `<li onclick="loadEntry(${index})" class="entryItem">
+                            <span><span class="entryLabel">Location: </span>${entry.name}</span><br>
+                            <span><span class="entryLabel">Period: </span>${entry.date[0]} - ${entry.date[6]}</span><br>
+                            <span><span class="entryLabel">Feelings: </span>${entry.feelings}</span>
+                          </li>`;
+        templateElemStr = `${templateElemStr}${newEntry}`;
+    })
+    entryList.innerHTML = '';
+    if (templateElemStr) {
+        document.getElementById('entry').style.display = 'block';
+    }
+    entryList.insertAdjacentHTML("beforeend", templateElemStr);
 }
 
 function generateCountryCodeDropdownList(countryCodes) {
     const dropdownElem = document.getElementById('countryCode');
-    let templateElemStr = `<option value="">Choose a country</option>`;
+    let templateElemStr = `<option value=""> choose a country</option>`;
     for (let i = 0; i < countryCodes.length; i++) {
         const newDropdownItem = `<option value="${countryCodes[i].alpha2Code}">${countryCodes[i].name}</option>`;
         templateElemStr = `${templateElemStr}${newDropdownItem}`;
@@ -119,32 +120,34 @@ function generateCountryCodeDropdownList(countryCodes) {
     dropdownElem.insertAdjacentHTML("beforeend", templateElemStr);
 }
 
+// Load entry form recent entries list
+function loadEntry(index) {
+    drawChart(recentEntriesData[index]);
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
 
 function drawChart(data) {
     const canvas = document.getElementById("weatherChart");
     canvas.style.backgroundColor = 'rgba(242, 53, 87, 0.1)';
     const ctx = canvas.getContext('2d');
-    const date = mapWeatherDataValues(data.list, 'dt');
-    const minTemp = mapWeatherDataValues(data.list, 'temp.min');
-    const maxTemp = mapWeatherDataValues(data.list, 'temp.max');
-    const chart = new Chart(ctx, {
+    new Chart(ctx, {
         // The type of chart we want to create
         type: 'line',
         // The data for our dataset
         data: {
-            labels: date,
+            labels: data.date,
             datasets: [
                 {
                     label: 'min ℃',
                     borderColor: 'rgb(34, 178, 218)',
                     fill: false,
-                    data: minTemp
+                    data: data.minTemp
                 },
                 {
                     label: 'max ℃',
                     borderColor: 'rgb(242, 53, 87)',
                     fill: false,
-                    data: maxTemp
+                    data: data.maxTemp
                 }
             ]
         },
@@ -152,7 +155,7 @@ function drawChart(data) {
         options: {
             title: {
                 display: true,
-                text: `Temperature in ${data.city.name}`
+                text: `Temperature in ${data.name}`
             },
             responsive: true,
             maintainAspectRatio: false
@@ -173,7 +176,11 @@ function submitForm(ev) {
                 alert(`No data could be found for your current entries`);
             }
             drawChart(data);
-            recentEntries().then((data) => console.log(data));
+            recentEntries().then((data) => {
+                recentEntriesData = [...data];
+                generateEntries(recentEntriesData);
+            });
+            window.scrollTo({top: 0, behavior: 'smooth'});
         });
 }
 
