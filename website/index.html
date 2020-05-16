@@ -3,46 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <title>Weather Journal</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport"/>
     <link href="https://fonts.googleapis.com/css?family=Oswald:400,600,700|Ranga:400,700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.1/moment.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="app">
-    <div class="box headline">
-        <div class="box headline">
-            Weather Journal App
-        </div>
+<section id="app">
+    <header class="box headline">
+        Weather Journal App
         <div id="msgNoGeolocation"></div>
-    </div>
-    <div class="box weatherData" id="weatherData">
-        <canvas id="weatherChart"></canvas>
-    </div>
-    <div class="box zip">
-        <label for="zip">Enter Zipcode here</label>
-        <input type="text" id="zip" placeholder="enter zip code here">
-    </div>
-    <div class="box country">
-        <label for="zip">Choose a country</label>
-        <select name="country" id="country">
-        </select>
-    </div>
-    <div class="box feel">
-        <label for="feelings">How are you feeling today?</label>
-        <textarea class="myInput" id="feelings" placeholder="Enter your feelings here" rows="9"
-                  cols="50"></textarea>
-        <button id="generate" type="submit">Generate</button>
-    </div>
-    <div class="box entry">
-        <div class="title">Most Recent Entry</div>
-        <div id="entryHolder">
-            <div id="date"></div>
-            <div id="temp"></div>
-            <div id="content"></div>
+        <p>Get a temperature forecast for the next 7 days</p>
+    </header>
+    <section class="box main">
+        <div class="weatherData" id="weatherData">
+            <canvas id="weatherChart"></canvas>
         </div>
-    </div>
-</div>
+        <form id="weatherForm">
+            <div class="box margin-vertical location">
+                <div class="zip">
+                    <label for="zip">Enter Zipcode here *</label>
+                    <input type="text" id="zip" placeholder="enter zip code here" name="zip" required>
+                </div>
+                <div class="countryCode">
+                    <label for="countryCode">Choose a country *</label>
+                    <select id="countryCode" name="countryCode" required>
+                    </select>
+                </div>
+            </div>
+            <div class="box margin-vertical personalData">
+                <div class="feel">
+                    <label for="feelings">How are you feeling today? *</label>
+                    <textarea id="feelings" placeholder="enter your feelings here" rows="9" name="feelings"
+                              required></textarea>
+                </div>
+                <div class="submitBtn">
+                    <button id="generate" type="submit" name="submitButton">Generate</button>
+                </div>
+            </div>
+            <div class="box margin-vertical entry">
+                <div class="title">Most Recent Entry</div>
+                <div id="entryHolder">
+                    <div id="date"></div>
+                    <div id="temp"></div>
+                    <div id="content"></div>
+                </div>
+            </div>
+        </form>
+    </section>
+</section>
 <script src="app.js" type="text/javascript"></script>
 </body>
 </html>

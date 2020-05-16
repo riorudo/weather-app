@@ -1,4 +1,7 @@
 /* Global Variables */
+const COUNTRY_CODES_URL = '/country-codes';
+const NEW_ENTRY_URL = '/new-entry';
+const RECENT_ENTRIES_URL = '/recent-entries';
 
 // Get weather data from server
 const getWeatherData = async (url = '') => {
@@ -16,6 +19,22 @@ const getWeatherData = async (url = '') => {
     }
 }
 
+const postEntry = async (url = '', data = {}) => {
+    const res = await fetch(url, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data), // body data type must match "Content-Type" header
+    });
+    try {
+        return await res.json();
+    } catch (e) {
+        console.log("error", e);
+    }
+}
+
 // Get country codes from server
 const getCountyCodes = async (url = '') => {
     const res = await fetch(url, {
@@ -28,7 +47,7 @@ const getCountyCodes = async (url = '') => {
     try {
         return await res.json();
     } catch (e) {
-        console.log(e);
+        console.log("error", e);
     }
 }
 
@@ -40,11 +59,28 @@ function getLocation() {
             getWeatherData(url)
                 .then((data) => {
                     drawChart(data);
+                    recentEntries().then((data) => console.log(data));
                 });
         });
     } else {
         const msgNoGeolocation = document.getElementById('msgNoGeolocation');
         msgNoGeolocation.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+// Get recent entries form node server
+const recentEntries = async () => {
+    const res = await fetch(RECENT_ENTRIES_URL, {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+    try {
+        return await res.json();
+    } catch (e) {
+        console.log("error", e);
     }
 }
 
@@ -60,7 +96,6 @@ function mapWeatherDataValues(days, key) {
             case ('dt'):
                 dataItem = moment.unix(day.dt).format("MM/DD/YYYY");
                 break;
-            case ('temp.day'):
             case ('temp.min'):
             case ('temp.max'):
                 dataItem = (key.split('.').reduce((p, c) => p && p[c] || null, day) - 273.15).toFixed(2);
@@ -75,7 +110,7 @@ function mapWeatherDataValues(days, key) {
 }
 
 function generateCountryCodeDropdownList(countryCodes) {
-    const dropdownElem = document.getElementById('country');
+    const dropdownElem = document.getElementById('countryCode');
     let templateElemStr = `<option value="">Choose a country</option>`;
     for (let i = 0; i < countryCodes.length; i++) {
         const newDropdownItem = `<option value="${countryCodes[i].alpha2Code}">${countryCodes[i].name}</option>`;
@@ -86,9 +121,10 @@ function generateCountryCodeDropdownList(countryCodes) {
 
 
 function drawChart(data) {
-    const ctx = document.getElementById('myChart').getContext('2d');
+    const canvas = document.getElementById("weatherChart");
+    canvas.style.backgroundColor = 'rgba(242, 53, 87, 0.1)';
+    const ctx = canvas.getContext('2d');
     const date = mapWeatherDataValues(data.list, 'dt');
-    const tempDay = mapWeatherDataValues(data.list, 'temp.day');
     const minTemp = mapWeatherDataValues(data.list, 'temp.min');
     const maxTemp = mapWeatherDataValues(data.list, 'temp.max');
     const chart = new Chart(ctx, {
@@ -99,20 +135,14 @@ function drawChart(data) {
             labels: date,
             datasets: [
                 {
-                    label: `day ℃`,
-                    borderColor: 'rgba(240, 215, 57)',
-                    fill: false,
-                    data: tempDay
-                },
-                {
                     label: 'min ℃',
-                    borderColor: 'rgba(34, 178, 218)',
+                    borderColor: 'rgb(34, 178, 218)',
                     fill: false,
                     data: minTemp
                 },
                 {
                     label: 'max ℃',
-                    borderColor: 'rgba(242, 53, 87)',
+                    borderColor: 'rgb(242, 53, 87)',
                     fill: false,
                     data: maxTemp
                 }
@@ -122,20 +152,36 @@ function drawChart(data) {
         options: {
             title: {
                 display: true,
-                text: `Temperature for the next 7 days in ${data.city.name}`
-            }
+                text: `Temperature in ${data.city.name}`
+            },
+            responsive: true,
+            maintainAspectRatio: false
         }
     });
 }
 
+function submitForm(ev) {
+    ev.preventDefault();
+    const elements = ev.target.elements;
+    let obj = {};
+    for (let item of elements) {
+        obj[item.name] = item.value;
+    }
+    postEntry(NEW_ENTRY_URL, obj)
+        .then((data) => {
+            if (!data) {
+                alert(`No data could be found for your current entries`);
+            }
+            drawChart(data);
+            recentEntries().then((data) => console.log(data));
+        });
+}
 
 setTimeout(() => {
-    const url = `/zip?zip=8046&countryCode=ch`
-    getWeatherData(url)
-        .then();
-    getCountyCodes('/country-codes')
+    getCountyCodes(COUNTRY_CODES_URL)
         .then((countryCodes) => {
             generateCountryCodeDropdownList(countryCodes);
         });
     getLocation();
+    document.getElementById('weatherForm').addEventListener('submit', submitForm)
 }, 0);

@@ -2,81 +2,35 @@ body{
     margin: 0;
     background: #fffff8;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-#app{
-    display: grid;
-    /* grid-template-columns:  */
-    height:100vh;
     background: #f23557;
-    color: #f0d43a;
-    justify-content: center;
-    grid-gap: 1em;
-    font-size: 20px;
-    font-family: 'Oswald', sans-serif;
-}
-
-#entryHolder{
-
-}
-
-#date{
-
-}
-
-#temp{
-
-}
-
-#content{
-
-}
-
-.box{
-    box-sizing: border-box;
-}
-
-.entry{
-    background: rgba(59, 74, 107, .4);
-}
-
-.headline {
-
-}
-.title{
-
-}
-
-.weatherData {
-    padding: 5px;
-    background-color: white;
 }
 
 /*  Basic Styling To Override Default For Basic HTML Elements */
 label{
+    box-sizing: border-box;
     display:block;
     font-size: 27px;
 }
 
-input, select{
+input, select, button,textarea {
+    box-sizing: border-box;
     display:block;
-    height: 60px;
-    width: 320px;
     background:#22b2da;
     color: #f0d43a;
+    width: 100%;
     font-size: 20px;
     font-family: 'Oswald', sans-serif;
     border: none;
 }
 
+input, select{
+    height: 60px;
+}
+
 button{
-    width: 400px;
     height: 100px;
     background: #3b4a6b;
-    color: #f0d43a;
     font-size: 26px;
-    font-family: 'Oswald', sans-serif;
-    border: none;
     box-shadow: 2px 4px 5px #444;
 }
 
@@ -84,12 +38,7 @@ h1{
     font-size: 36px;
 }
 
-textarea{
-    background:#22b2da;
-    color: #f0d43a;
-    font-size: 20px;
-    font-family: 'Oswald', sans-serif;
-}
+
 /* Reset style for HTML element on active to have no border*/
 input:focus,
 select:focus,
@@ -98,17 +47,97 @@ button:focus {
     outline: none;
 }
 /* Style for Placeholder Text*/
-::placeholder { /* Firefox, Chrome, Opera */ 
-    color: #f0d43a; 
+::placeholder { /* Firefox, Chrome, Opera */
+    color: #f0d43a;
     font-family: 'Oswald', sans-serif;
-} 
-  
-:-ms-input-placeholder { /* Internet Explorer 10-11 */ 
-    color: #f0d43a; 
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #f0d43a;
     font-family: 'Oswald', sans-serif;
-} 
-  
-::-ms-input-placeholder { /* Microsoft Edge */ 
-    color: #f0d43a; 
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #f0d43a;
     font-family: 'Oswald', sans-serif;
-} 
+}
+
+/* Custom app styling*/
+#app{
+    padding: 0 5px;
+    display: grid;
+    grid-template-areas: "hd" "main";
+    color: #f0d43a;
+    grid-gap: 1em;
+    font-size: 20px;
+    font-family: 'Oswald', sans-serif;
+}
+
+.box{
+    box-sizing: border-box;
+}
+
+.headline {
+    grid-area: hd;
+}
+
+.main {
+    grid-area: main;
+}
+
+.weatherData {
+    position: relative;
+    min-height: 250px;
+    width: 98vw;
+    background-color: white;
+}
+
+.location {
+    display: flex;
+    flex-direction: column;
+}
+
+.personalData {
+    display: flex;
+    flex-direction: column;
+}
+
+.entry{
+    background: rgba(59, 74, 107, 0.4);
+}
+
+.margin-vertical {
+    margin: 20px 0;
+}
+
+@media (min-width: 600px) {
+    .location {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    .personalData {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    .zip, .countryCode, .feel, .submitBtn {
+        width: 48%;
+    }
+
+}
+
+@media (min-width: 900px) {
+    #app{
+        grid-template-columns: auto 900px auto;
+        grid-template-areas: "lb hd rb" "lb main rb";
+        justify-content: center;
+    }
+
+    .weatherData {
+        width: 900px;
+    }
+}
+
